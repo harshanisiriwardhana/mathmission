@@ -1,0 +1,88 @@
+@import url('https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;700;900&display=swap');
+
+:root {
+  --yellow: #FFD43B;
+  --blue: #4DABF7;
+  --green: #69DB7C;
+  --red: #FF6B6B;
+  --purple: #CC5DE8;
+  --orange: #FF922B;
+  --dark: #1A1A2E;
+  --white: #FFFFFF;
+  --radius: 16px;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Nunito', sans-serif;
+  background: var(--blue);
+  min-height: 100vh;
+}
+
+.splash {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #4DABF7 0%, #CC5DE8 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.logo-wrap {
+  text-align: center;
+  z-index: 2;
+  animation: popIn 0.6s ease both;
+}
+
+.logo-rocket {
+  font-size: 6rem;
+  line-height: 1;
+}
+
+.logo-title {
+  font-family: 'Fredoka One', cursive;
+  font-size: 5rem;
+  color: #FFFFFF;
+  text-shadow: 5px 5px 0 #1A1A2E;
+  letter-spacing: 2px;
+  line-height: 1;
+  margin: 0.25rem 0;
+}
+
+.logo-title span {
+  color: #FFD43B;
+}
+
+.logo-tagline {
+  font-size: 1.4rem;
+  font-weight: 900;
+  color: #FFFFFF;
+  background: #1A1A2E;
+  display: inline-block;
+  padding: 6px 20px;
+  border-radius: 30px;
+  margin-top: 0.75rem;
+}
+
+.splash-stars {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.star-float {
+  position: absolute;
+  font-size: 1.8rem;
+  opacity: 0.7;
+}
+
+@keyframes popIn {
+  0% { transform: scale(0); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
