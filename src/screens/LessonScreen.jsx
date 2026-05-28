@@ -14,23 +14,31 @@ export default function LessonScreen() {
   const world = worlds[worldId]
   const worldData = allData.find(w => w.worldId === worldId)
 
-  const [lessonIndex, setLessonIndex] = useState(0)
+  const [lessonIndex] = useState(0)
   const [part, setPart] = useState('LEARN')
-  const [slideIndex, setSlideIndex] = useState(0)
-  const [questionIndex, setQuestionIndex] = useState(0)
-  const [score, setScore] = useState(0)
-  const [selected, setSelected] = useState(null)
-  const [answered, setAnswered] = useState(false)
+  const [sceneIndex, setSceneIndex] = useState(0)
+  const [playIndex, setPlayIndex] = useState(0)
+  const [playSelected, setPlaySelected] = useState(null)
+  const [playAnswered, setPlayAnswered] = useState(false)
+  const [playScore, setPlayScore] = useState(0)
+  const [proveIndex, setProveIndex] = useState(0)
+  const [proveSelected, setProveSelected] = useState(null)
+  const [proveAnswered, setProveAnswered] = useState(false)
+  const [proveScore, setProveScore] = useState(0)
+  const [showResult, setShowResult] = useState(false)
 
   if (!worldData) {
     return (
       <div className="lesson-screen">
         <div className="lesson-card">
-          <h2>🚧 Coming Soon!</h2>
-          <p>This world is being built!</p>
-          <button className="access-btn" onClick={() => navigate('/worlds')}>
-            Back to World Map
-          </button>
+          <div style={{ textAlign: 'center', padding: '40px' }}>
+            <div style={{ fontSize: '4rem' }}>🚧</div>
+            <h2 style={{ fontFamily: 'Fredoka One', fontSize: '1.8rem', margin: '16px 0' }}>Coming Soon!</h2>
+            <p style={{ marginBottom: '24px', color: '#666' }}>This world is being built!</p>
+            <button className="access-btn" onClick={() => navigate('/worlds')}>
+              Back to World Map 🗺️
+            </button>
+          </div>
         </div>
       </div>
     )
@@ -38,102 +46,237 @@ export default function LessonScreen() {
 
   const lesson = worldData.lessons[lessonIndex]
 
-  function nextSlide() {
-    if (slideIndex < lesson.learn.slides.length - 1) {
-      setSlideIndex(slideIndex + 1)
+  // ─── LEARN ───
+  function nextScene() {
+    if (sceneIndex < lesson.learn.scenes.length - 1) {
+      setSceneIndex(sceneIndex + 1)
     } else {
       setPart('PLAY')
-      setSlideIndex(0)
-      setQuestionIndex(0)
-      setScore(0)
-      setSelected(null)
-      setAnswered(false)
+      setSceneIndex(0)
     }
   }
 
-  function handleAnswer(option) {
-    if (answered) return
-    setSelected(option)
-    setAnswered(true)
-    if (option === lesson.questions[questionIndex].answer) {
-      setScore(score + 1)
+  // ─── PLAY ───
+  function handlePlayAnswer(choice) {
+    if (playAnswered) return
+    setPlaySelected(choice)
+    setPlayAnswered(true)
+    if (choice === lesson.play[playIndex].answer) {
+      setPlayScore(playScore + 1)
     }
   }
 
-  function nextQuestion() {
-    if (questionIndex < lesson.questions.length - 1) {
-      setQuestionIndex(questionIndex + 1)
-      setSelected(null)
-      setAnswered(false)
+  function nextPlay() {
+    if (playIndex < lesson.play.length - 1) {
+      setPlayIndex(playIndex + 1)
+      setPlaySelected(null)
+      setPlayAnswered(false)
     } else {
-      const stars = score >= 4 ? (score === 5 ? 3 : 2) : 0
-      const accessKey = loadAccessKey()
-      if (stars > 0) saveLessonProgress(accessKey, worldId, lessonIndex, stars)
-      navigate('/stars', { state: { stars, worldId, lessonIndex, score } })
+      setPart('PROVE IT')
+      setPlayIndex(0)
+      setPlaySelected(null)
+      setPlayAnswered(false)
     }
   }
+
+  // ─── PROVE IT ───
+  function handleProveAnswer(choice) {
+    if (proveAnswered) return
+    setProveSelected(choice)
+    setProveAnswered(true)
+    if (String(choice) === String(lesson.proveit[proveIndex].answer)) {
+      setProveScore(proveScore + 1)
+    }
+  }
+
+  function nextProve() {
+    if (proveIndex < lesson.proveit.length - 1) {
+      setProveIndex(proveIndex + 1)
+      setProveSelected(null)
+      setProveAnswered(false)
+    } else {
+      setShowResult(true)
+    }
+  }
+
+  function finishLesson() {
+    const stars = proveScore === 5 ? 3 : proveScore >= 4 ? 2 : 0
+    const accessKey = loadAccessKey()
+    if (stars > 0) saveLessonProgress(accessKey, worldId, lessonIndex, stars)
+    navigate('/stars', { state: { stars, worldId, lessonIndex, score: proveScore } })
+  }
+
+  function retryProveIt() {
+    setProveIndex(0)
+    setProveSelected(null)
+    setProveAnswered(false)
+    setProveScore(0)
+    setShowResult(false)
+  }
+
+  const scene = lesson.learn.scenes[sceneIndex]
+  const playQ = lesson.play[playIndex]
+  const proveQ = lesson.proveit[proveIndex]
 
   return (
     <div className="lesson-screen">
       <div className="lesson-header">
         <button className="back-btn" onClick={() => navigate('/worlds')}>← Back</button>
         <h2 className="lesson-world-name">{world.emoji} {world.name}</h2>
-        <span className="lesson-part-badge">{part}</span>
+        <span className={`lesson-part-badge ${part === 'PROVE IT' ? 'prove-badge' : part === 'PLAY' ? 'play-badge' : ''}`}>
+          {part}
+        </span>
       </div>
 
       <div className="lesson-card">
+
+        {/* ── LEARN ── */}
         {part === 'LEARN' && (
           <div className="learn-section">
             <h2 className="learn-title">{lesson.learn.title}</h2>
-            <div className="learn-slide">
-              <div className="slide-emoji">{lesson.learn.slides[slideIndex].emoji}</div>
-              <div className="slide-text">{lesson.learn.slides[slideIndex].text}</div>
+            <div className="learn-scene">
+              <div className="scene-objects">
+                {scene.objects.map((obj, i) => (
+                  <span key={i} className="scene-obj">{obj}</span>
+                ))}
+              </div>
+              <div className="scene-number">{scene.number}</div>
+              <div className="scene-word">{scene.word}</div>
             </div>
             <div className="slide-dots">
-              {lesson.learn.slides.map((_, i) => (
-                <span key={i} className={`dot ${i === slideIndex ? 'active' : ''}`} />
+              {lesson.learn.scenes.map((_, i) => (
+                <span key={i} className={`dot ${i === sceneIndex ? 'active' : ''}`} />
               ))}
             </div>
-            <button className="access-btn" onClick={nextSlide}>
-              {slideIndex < lesson.learn.slides.length - 1 ? 'Next ➡️' : 'Start Playing! 🎮'}
+            <button className="access-btn" onClick={nextScene}>
+              {sceneIndex < lesson.learn.scenes.length - 1 ? 'Next ➡️' : "Let's Play! 🎮"}
             </button>
           </div>
         )}
 
-        {(part === 'PLAY' || part === 'PROVE IT') && (
+        {/* ── PLAY ── */}
+        {part === 'PLAY' && (
           <div className="play-section">
-            <div className="question-counter">
-              Question {questionIndex + 1} of {lesson.questions.length}
-            </div>
-            <div className="question-text">
-              {lesson.questions[questionIndex].question}
-            </div>
-            <div className="options-grid">
-              {lesson.questions[questionIndex].options.map(option => (
+            <div className="question-counter">Round {playIndex + 1} of {lesson.play.length}</div>
+            {playQ.objects && (
+              <div className="play-objects">
+                {playQ.objects.map((obj, i) => (
+                  <span key={i} className="play-obj">{obj}</span>
+                ))}
+              </div>
+            )}
+            {playQ.question && (
+              <div className="question-text">{playQ.question}</div>
+            )}
+            <p className="play-instruction">How many?</p>
+            <div className="choices-row">
+              {playQ.choices.map(choice => (
                 <button
-                  key={option}
-                  className={`option-btn ${
-                    answered
-                      ? option === lesson.questions[questionIndex].answer
-                        ? 'correct'
-                        : option === selected
-                        ? 'wrong'
-                        : ''
+                  key={choice}
+                  className={`choice-btn ${
+                    playAnswered
+                      ? choice === playQ.answer ? 'correct' : choice === playSelected ? 'wrong' : ''
                       : ''
                   }`}
-                  onClick={() => handleAnswer(option)}
+                  onClick={() => handlePlayAnswer(choice)}
                 >
-                  {option}
+                  {choice}
                 </button>
               ))}
             </div>
-            {answered && (
-              <button className="access-btn" onClick={nextQuestion}>
-                {questionIndex < lesson.questions.length - 1 ? 'Next Question ➡️' : 'See My Stars! ⭐'}
-              </button>
+            {playAnswered && (
+              <div>
+                <div className="feedback">
+                  {playSelected === playQ.answer ? '⭐ Correct! Well done!' : `The answer was ${playQ.answer}!`}
+                </div>
+                <button className="access-btn" onClick={nextPlay}>
+                  {playIndex < lesson.play.length - 1 ? 'Next Round ➡️' : 'Prove It! 💪'}
+                </button>
+              </div>
             )}
           </div>
         )}
+
+        {/* ── PROVE IT ── */}
+        {part === 'PROVE IT' && !showResult && (
+          <div className="proveit-section">
+            <div className="question-counter">Question {proveIndex + 1} of {lesson.proveit.length}</div>
+            <div className="proveit-stars">
+              {[1,2,3,4,5].map(i => (
+                <span key={i}>{i <= proveScore ? '⭐' : '☆'}</span>
+              ))}
+            </div>
+            <div className="question-text">{proveQ.question}</div>
+            <div className="proveit-objects">
+              {proveQ.objects && proveQ.objects.map((obj, i) => (
+                <span key={i} className="proveit-obj">{obj}</span>
+              ))}
+            </div>
+            <div className="options-grid">
+              {proveQ.choices && proveQ.choices.map(choice => (
+                <button
+                  key={choice}
+                  className={`option-btn ${
+                    proveAnswered
+                      ? String(choice) === String(proveQ.answer) ? 'correct' : String(choice) === String(proveSelected) ? 'wrong' : ''
+                      : ''
+                  }`}
+                  onClick={() => handleProveAnswer(choice)}
+                >
+                  {choice}
+                </button>
+              ))}
+            </div>
+            {proveAnswered && (
+              <div>
+                <div className="feedback">
+                  {String(proveSelected) === String(proveQ.answer) ? '⭐ Correct!' : `The answer was ${proveQ.answer}!`}
+                </div>
+                <button className="access-btn" onClick={nextProve}>
+                  {proveIndex < lesson.proveit.length - 1 ? 'Next Question ➡️' : 'See My Result! 🌟'}
+                </button>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* ── RESULT ── */}
+        {part === 'PROVE IT' && showResult && (
+          <div className="result-section">
+            {proveScore >= 4 ? (
+              <div>
+                <div style={{ fontSize: '4rem', textAlign: 'center' }}>🎉</div>
+                <h2 className="learn-title">
+                  {proveScore === 5 ? 'PERFECT! Amazing! 🌟' : 'Well Done! You Passed! 👏'}
+                </h2>
+                <p style={{ textAlign: 'center', fontWeight: 900, color: '#666', marginBottom: '24px' }}>
+                  You got {proveScore} out of 5 correct!
+                </p>
+                <button className="access-btn" onClick={finishLesson}>
+                  Collect My Stars! ⭐
+                </button>
+              </div>
+            ) : (
+              <div>
+                <div style={{ fontSize: '4rem', textAlign: 'center' }}>💪</div>
+                <h2 className="learn-title">Keep Trying!</h2>
+                <p style={{ textAlign: 'center', fontWeight: 900, color: '#666', marginBottom: '8px' }}>
+                  You got {proveScore} out of 5.
+                </p>
+                <p style={{ textAlign: 'center', color: '#888', marginBottom: '24px' }}>
+                  You need 4 out of 5 to pass. You can do it! 🚀
+                </p>
+                <button className="access-btn" onClick={retryProveIt}>
+                  Try Again! 🔄
+                </button>
+                <button className="retry-btn" style={{ marginTop: '12px' }} onClick={() => navigate('/worlds')}>
+                  Back to World Map 🗺️
+                </button>
+              </div>
+            )}
+          </div>
+        )}
+
       </div>
     </div>
   )
