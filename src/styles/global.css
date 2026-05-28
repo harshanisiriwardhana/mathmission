@@ -233,4 +233,117 @@ body {
   color: #666;
   font-weight: 700;
   margin-bottom: 24px;
+}/* WORLD MAP SCREEN */
+.worldmap-screen {
+  min-height: 100vh;
+  background: linear-gradient(180deg, #1A1A2E 0%, #16213E 100%);
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.worldmap-header {
+  text-align: center;
+  padding: 20px 0 10px 0;
+}
+
+.worldmap-title {
+  font-family: 'Fredoka One', cursive;
+  font-size: 2.5rem;
+  color: #FFD43B;
+  text-shadow: 3px 3px 0 #1A1A2E;
+  margin-bottom: 8px;
+}
+
+.worldmap-greeting {
+  font-size: 1.1rem;
+  color: #FFFFFF;
+  font-weight: 700;
+}
+
+.stage-section {
+  margin: 20px 0;
+}
+
+.stage-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+  background: rgba(255,255,255,0.1);
+  padding: 10px 16px;
+  border-radius: 16px;
+}
+
+.stage-emoji {
+  font-size: 1.8rem;
+}
+
+.stage-title {
+  font-family: 'Fredoka One', cursive;
+  font-size: 1.3rem;
+  color: #FFFFFF;
+}
+
+.worlds-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.world-card {
+  background: var(--world-color);
+  border: 3px solid #1A1A2E;
+  border-radius: 16px;
+  box-shadow: 4px 4px 0px #1A1A2E;
+  padding: 16px 8px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.world-card:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0px #1A1A2E;
+}
+
+.world-card:active {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0px #1A1A2E;
+}
+
+.world-emoji {
+  font-size: 2.2rem;
+  margin-bottom: 6px;
+}
+
+.world-name {
+  font-family: 'Fredoka One', cursive;
+  font-size: 0.85rem;
+  color: #1A1A2E;
+  line-height: 1.2;
+  margin-bottom: 6px;
+}
+
+.world-stars {
+  font-size: 0.8rem;
+}
+
+.worldmap-footer {
+  text-align: center;
+  padding: 20px 0;
+}
+
+.parent-btn {
+  background: rgba(255,255,255,0.15);
+  color: #FFFFFF;
+  border: 3px solid rgba(255,255,255,0.3);
+  border-radius: 30px;
+  padding: 12px 24px;
+  font-size: 1rem;
+  font-family: 'Fredoka One', cursive;
+  cursor: pointer;
+}
+
+.parent-btn:hover {
+  background: rgba(255,255,255,0.25);
 }
