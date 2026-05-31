@@ -28,11 +28,19 @@ export default function WorldMapScreen() {
                   key={world.id}
                   className="world-card"
                   style={{ '--world-color': world.color }}
-                  onClick={() => navigate('/lesson', { state: { worldId: world.id } })}
+                  onClick={() => navigate('/lesson', { state: { worldId: world.id, key: accessKey } })}
                 >
-                  <div className="world-emoji">{world.emoji}</div>
+                  <div className="world-img-wrap">
+                    <img
+                      src={`/assets/images/world${world.id + 1}.png`}
+                      alt={world.name}
+                      className="world-img"
+                      onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'flex' }}
+                    />
+                    <div className="world-emoji-fallback" style={{ display: 'none' }}>{world.emoji}</div>
+                  </div>
                   <div className="world-name">{world.name}</div>
-                  <div className="world-stars">⭐⭐⭐</div>
+                  <div className="world-stars">⭐ ⭐ ⭐</div>
                 </div>
               ))}
           </div>
@@ -42,6 +50,9 @@ export default function WorldMapScreen() {
       <div className="worldmap-footer">
         <button className="parent-btn" onClick={() => navigate('/parent')}>
           👨‍👩‍👧 Parent Dashboard
+        </button>
+        <button className="parent-btn" onClick={() => navigate('/badges', { state: { key: accessKey } })}>
+          🏆 My Badges
         </button>
       </div>
     </div>

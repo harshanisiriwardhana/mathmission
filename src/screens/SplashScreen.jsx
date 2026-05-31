@@ -13,7 +13,13 @@ export default function SplashScreen() {
   return (
     <div className="splash">
       <div className="logo-wrap">
-        <div className="logo-rocket">🚀</div>
+        <div className="logo-rocket">
+          <img
+            src="/assets/images/rocket.png"
+            alt="MathMission Rocket"
+            style={{ width: '140px', height: '140px', objectFit: 'contain' }}
+          />
+        </div>
         <h1 className="logo-title">Math<span>Mission</span></h1>
         <p className="logo-tagline">Learning is your superpower!</p>
       </div>
