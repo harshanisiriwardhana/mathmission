@@ -13,13 +13,42 @@ export default function StarAwardScreen() {
 
   return (
     <div className="stars-screen">
+      <style>{`
+        @keyframes starPop {
+          0%   { transform: scale(0) rotate(-30deg); opacity: 0; }
+          60%  { transform: scale(1.25) rotate(8deg); }
+          100% { transform: scale(1) rotate(0deg); opacity: 1; }
+        }
+        .award-star {
+          width: 130px;
+          height: 130px;
+          object-fit: contain;
+          margin: 0 10px;
+        }
+        .award-star.earned {
+          animation: starPop 0.6s ease-out both;
+          filter: drop-shadow(0 0 14px rgba(255, 200, 0, 0.7));
+        }
+        .award-star.earned.s1 { animation-delay: 0.1s; }
+        .award-star.earned.s2 { animation-delay: 0.35s; }
+        .award-star.earned.s3 { animation-delay: 0.6s; }
+        .award-star.empty {
+          opacity: 0.3;
+        }
+        @media (max-width: 600px) {
+          .award-star { width: 90px; height: 90px; margin: 0 6px; }
+        }
+      `}</style>
       <div className="stars-card">
         <div className="stars-title">{messages[stars]}</div>
         <div className="stars-display">
           {[1, 2, 3].map(i => (
-            <span key={i} className={`big-star ${i <= stars ? 'earned' : 'empty'}`}>
-              ⭐
-            </span>
+            <img
+              key={i}
+              src={i <= stars ? '/assets/images/star_gold.png' : '/assets/images/star_silver.png'}
+              alt={i <= stars ? 'Gold star' : 'Empty star'}
+              className={`award-star ${i <= stars ? `earned s${i}` : 'empty'}`}
+            />
           ))}
         </div>
         <div className="stars-score">

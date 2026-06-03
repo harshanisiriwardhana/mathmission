@@ -7,6 +7,51 @@ import { loadAccessKey } from '../utils/storage'
 
 const allData = [...stage0]
 
+// ─── Object image mapping ───
+// Maps lesson emojis to your PNG files in public/assets/images/.
+// If an emoji is in this list, the matching PNG is shown.
+// If it is NOT in the list, the emoji itself is shown instead.
+// To add more later, just generate the PNG and add a line here.
+const OBJECT_IMAGES = {
+  '🍎': 'obj_apple.png',
+  '🎈': 'obj_balloon.png',
+  '🦋': 'obj_butterfly.png',
+  '🐱': 'obj_cat.png',
+  '☁️': 'obj_cloud.png',
+  '🦆': 'obj_duck.png',
+  '🐟': 'obj_fish.png',
+  '🌸': 'obj_flower.png',
+  '🌺': 'obj_flower.png',
+  '⭐': 'obj_star.png',
+  '🌟': 'obj_star.png',
+  '🌲': 'obj_tree.png',
+}
+
+// Renders a single lesson object: a PNG if we have one, otherwise the emoji.
+function ObjectIcon({ obj }) {
+  const file = OBJECT_IMAGES[obj]
+  if (file) {
+    return (
+      <img
+        src={`/assets/images/${file}`}
+        alt=""
+        style={{
+          width: '120px',
+          height: '120px',
+          objectFit: 'contain',
+          display: 'inline-block',
+        }}
+      />
+    )
+  }
+  // Fallback: emoji, sized to roughly match the images
+  return (
+    <span style={{ fontSize: '70px', lineHeight: 1, display: 'inline-block' }}>
+      {obj}
+    </span>
+  )
+}
+
 export default function LessonScreen() {
   const navigate = useNavigate()
   const location = useLocation()
@@ -134,15 +179,13 @@ export default function LessonScreen() {
         {part === 'LEARN' && (
           <div className="learn-section">
             <h2 className="learn-title">{lesson.learn.title}</h2>
-            <div className="learn-scene">
-              <div className="scene-objects">
-                {scene.objects.map((obj, i) => (
-                  <span key={i} className="scene-obj">{obj}</span>
-                ))}
-              </div>
-              <div className="scene-number">{scene.number}</div>
-              <div className="scene-word">{scene.word}</div>
+            <div className="scene-objects">
+              {scene.objects.map((obj, i) => (
+                <ObjectIcon key={i} obj={obj} />
+              ))}
             </div>
+            <div className="scene-number">{scene.number}</div>
+            <div className="scene-word">{scene.word}</div>
             <div className="slide-dots">
               {lesson.learn.scenes.map((_, i) => (
                 <span key={i} className={`dot ${i === sceneIndex ? 'active' : ''}`} />
@@ -158,10 +201,10 @@ export default function LessonScreen() {
         {part === 'PLAY' && (
           <div className="play-section">
             <div className="question-counter">Round {playIndex + 1} of {lesson.play.length}</div>
-            {playQ.objects && (
+            {playQ.objects && playQ.objects.length > 0 && (
               <div className="play-objects">
                 {playQ.objects.map((obj, i) => (
-                  <span key={i} className="play-obj">{obj}</span>
+                  <ObjectIcon key={i} obj={obj} />
                 ))}
               </div>
             )}
@@ -207,11 +250,13 @@ export default function LessonScreen() {
               ))}
             </div>
             <div className="question-text">{proveQ.question}</div>
-            <div className="proveit-objects">
-              {proveQ.objects && proveQ.objects.map((obj, i) => (
-                <span key={i} className="proveit-obj">{obj}</span>
-              ))}
-            </div>
+            {proveQ.objects && proveQ.objects.length > 0 && (
+              <div className="proveit-objects">
+                {proveQ.objects.map((obj, i) => (
+                  <ObjectIcon key={i} obj={obj} />
+                ))}
+              </div>
+            )}
             <div className="options-grid">
               {proveQ.choices && proveQ.choices.map(choice => (
                 <button
