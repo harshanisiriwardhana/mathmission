@@ -35,6 +35,7 @@ export default function WorldMapScreen() {
                       src={`/assets/images/world${world.id + 1}.png`}
                       alt={world.name}
                       className="world-img"
+                      loading="lazy"
                       onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'flex' }}
                     />
                     <div className="world-emoji-fallback" style={{ display: 'none' }}>{world.emoji}</div>
