@@ -24,11 +24,51 @@ export const stage0 = [
           { objects: ['🌸', '🌸', '🌸', '🌸', '🌸'], answer: 5, choices: [3, 4, 5] },
         ],
         proveit: [
-          { question: 'How many stars?', objects: ['⭐', '⭐', '⭐'], choices: ['2', '3', '4'], answer: '3' },
-          { question: 'How many balloons?', objects: ['🎈', '🎈', '🎈', '🎈'], choices: ['2', '4', '5'], answer: '4' },
-          { question: 'How many apples?', objects: ['🍎', '🍎', '🍎'], choices: ['2', '3', '5'], answer: '3' },
-          { question: 'How many ducks?', objects: ['🦆', '🦆', '🦆', '🦆'], choices: ['3', '4', '5'], answer: '4' },
-          { question: 'How many candles?', objects: ['🕯️', '🕯️', '🕯️', '🕯️', '🕯️'], choices: ['3', '4', '5'], answer: '5' },
+          {
+            type: 'group',
+            question: 'Which group has 4?',
+            voice: 'Which group has 4?',
+            groups: [
+              ['⭐', '⭐'],
+              ['⭐', '⭐', '⭐', '⭐'],
+              ['⭐', '⭐', '⭐', '⭐', '⭐'],
+            ],
+            answer: 1
+          },
+          {
+            type: 'count',
+            question: 'How many balloons?',
+            voice: 'How many balloons?',
+            objects: ['🎈', '🎈', '🎈', '🎈'],
+            choices: ['2', '4', '5'],
+            answer: '4'
+          },
+          {
+            type: 'count',
+            question: 'How many apples?',
+            voice: 'How many apples?',
+            objects: ['🍎', '🍎', '🍎'],
+            choices: ['2', '3', '5'],
+            answer: '3'
+          },
+          {
+            type: 'group',
+            question: 'Tap the group with 4 ducks',
+            voice: 'Tap the group with 4 ducks',
+            groups: [
+              ['🦆'],
+              ['🦆', '🦆', '🦆', '🦆'],
+            ],
+            answer: 1
+          },
+          {
+            type: 'count',
+            question: 'How many candles?',
+            voice: 'How many candles?',
+            objects: ['🕯️', '🕯️', '🕯️', '🕯️', '🕯️'],
+            choices: ['3', '4', '5'],
+            answer: '5'
+          },
         ]
       },
       {
@@ -52,11 +92,11 @@ export const stage0 = [
           { objects: ['🌺', '🌺', '🌺', '🌺', '🌺', '🌺', '🌺', '🌺', '🌺', '🌺'], answer: 10, choices: [8, 9, 10] },
         ],
         proveit: [
-          { question: 'How many bees?', objects: ['🐝', '🐝', '🐝', '🐝', '🐝', '🐝'], choices: ['5', '6', '7'], answer: '6' },
-          { question: 'How many butterflies?', objects: ['🦋', '🦋', '🦋', '🦋', '🦋', '🦋', '🦋'], choices: ['6', '7', '8'], answer: '7' },
-          { question: 'How many mushrooms?', objects: ['🍄', '🍄', '🍄', '🍄', '🍄', '🍄', '🍄', '🍄'], choices: ['7', '8', '9'], answer: '8' },
-          { question: 'How many frogs?', objects: ['🐸', '🐸', '🐸', '🐸', '🐸', '🐸', '🐸', '🐸', '🐸'], choices: ['8', '9', '10'], answer: '9' },
-          { question: 'How many flowers?', objects: ['🌺', '🌺', '🌺', '🌺', '🌺', '🌺', '🌺', '🌺', '🌺', '🌺'], choices: ['8', '9', '10'], answer: '10' },
+          { type: 'count', question: 'How many bees?', voice: 'How many bees?', objects: ['🐝', '🐝', '🐝', '🐝', '🐝', '🐝'], choices: ['5', '6', '7'], answer: '6' },
+          { type: 'count', question: 'How many butterflies?', voice: 'How many butterflies?', objects: ['🦋', '🦋', '🦋', '🦋', '🦋', '🦋', '🦋'], choices: ['6', '7', '8'], answer: '7' },
+          { type: 'count', question: 'How many mushrooms?', voice: 'How many mushrooms?', objects: ['🍄', '🍄', '🍄', '🍄', '🍄', '🍄', '🍄', '🍄'], choices: ['7', '8', '9'], answer: '8' },
+          { type: 'count', question: 'How many frogs?', voice: 'How many frogs?', objects: ['🐸', '🐸', '🐸', '🐸', '🐸', '🐸', '🐸', '🐸', '🐸'], choices: ['8', '9', '10'], answer: '9' },
+          { type: 'count', question: 'How many flowers?', voice: 'How many flowers?', objects: ['🌺', '🌺', '🌺', '🌺', '🌺', '🌺', '🌺', '🌺', '🌺', '🌺'], choices: ['8', '9', '10'], answer: '10' },
         ]
       },
       {
@@ -80,11 +120,11 @@ export const stage0 = [
           { question: 'What comes after 6?', objects: [], choices: [5, 7, 8], answer: 7 },
         ],
         proveit: [
-          { question: 'What comes after 4?', objects: [], choices: ['3', '5', '6'], answer: '5' },
-          { question: 'What comes before 8?', objects: [], choices: ['6', '7', '9'], answer: '7' },
-          { question: 'What comes after 7?', objects: [], choices: ['6', '8', '9'], answer: '8' },
-          { question: 'What comes before 3?', objects: [], choices: ['1', '2', '4'], answer: '2' },
-          { question: 'What comes after 5?', objects: [], choices: ['4', '6', '7'], answer: '6' },
+          { type: 'count', question: 'What comes after 4?', voice: 'What comes after 4?', objects: [], choices: ['3', '5', '6'], answer: '5' },
+          { type: 'count', question: 'What comes before 8?', voice: 'What comes before 8?', objects: [], choices: ['6', '7', '9'], answer: '7' },
+          { type: 'count', question: 'What comes after 7?', voice: 'What comes after 7?', objects: [], choices: ['6', '8', '9'], answer: '8' },
+          { type: 'count', question: 'What comes before 3?', voice: 'What comes before 3?', objects: [], choices: ['1', '2', '4'], answer: '2' },
+          { type: 'count', question: 'What comes after 5?', voice: 'What comes after 5?', objects: [], choices: ['4', '6', '7'], answer: '6' },
         ]
       }
     ]
